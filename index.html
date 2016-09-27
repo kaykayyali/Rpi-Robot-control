@@ -1,0 +1,270 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<script src="https://code.jquery.com/jquery-3.0.0.min.js" integrity="sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0=" crossorigin="anonymous"></script>
+	</head>
+	<body onload="setTimeout('init();', 100);">
+		<center>
+	      <div><img id="mjpeg_dest" style="width:75%;" /></div>
+	    <div class="motor_control_wrap">
+			<button class="motor_control_button pan_left" id="left">Left</button>
+			<button class="motor_control_button pan_right" id="right">RIGHT</button>
+			<button class="motor_control_button tilt_up" id="forward">Forward</button>
+			<button class="motor_control_button tilt_down" id="backward">Backward</button>
+			<button class="motor_control_button" id="release">Release</button>
+		</div>
+		<div class="camera_servo_controls_wrap">
+			<button class="camera_servo_button pan_left" id="pan_left">Pan Left</button>
+			<button class="camera_servo_button pan_right" id="pan_right">Pan Right</button>
+			<button class="camera_servo_button tilt_up" id="tilt_up">Tilt Up</button>
+			<button class="camera_servo_button tilt_down" id="tilt_down">Tilt Down</button>
+			<button class="camera_servo_button" id="reset">Reset</button>
+		</div>
+	    </center>
+		<script>
+		var mjpeg_img;
+ 
+		function reload_img () {
+			var host_name = location.hostname;
+		  mjpeg_img.src = "http://"+host_name+":80/cam_pic.php?time=" + new Date().getTime();
+		}
+		function error_img () {
+		  setTimeout("mjpeg_img.src = 'cam_pic.php?time=' + new Date().getTime();", 100);
+		}
+		function init() {
+		  mjpeg_img = document.getElementById("mjpeg_dest");
+		  mjpeg_img.onload = reload_img;
+		  mjpeg_img.onerror = error_img;
+		  reload_img();
+		}
+		$(document).ready(function() {
+			var servos = {
+				camera_pan: {
+					id: 0,
+					name: "camera_pan"
+				},
+				camera_tilt: {
+					id: 1,
+					name: "camera_tilt"
+				}
+			};
+			$('.motor_control_button').on('mousedown', function(event) {
+				var direction = event.target.id
+				if (direction == "left" || direction == "right") {
+					$.get('/turn_motor/'+ direction, function(response){
+						console.log(response.response);
+					});
+				}
+				else {
+					$.get('/move_motor_in_direction/'+ direction, function(response){
+						console.log(response.response);
+					});
+				}
+			});
+
+			$('.camera_servo_button').on('mousedown', function(event) {
+				var button_type = event.target.id;
+				var direction;
+				var servo;
+				switch(button_type) {
+					case "pan_left":
+						direction = 1;
+						servo = servos["camera_pan"];
+						// console.log("Moving " + servo.name + " by " + direction);
+						break;
+				    case "pan_right":
+						direction = -1;
+						servo = servos["camera_pan"];
+						// console.log("Moving " + servo.name + " by " + direction);
+						break;
+					case "tilt_up":
+						direction = -1;
+						servo = servos["camera_tilt"];
+						// console.log("Moving " + servo.name + " by " + direction);
+						break;
+					case "tilt_down":
+						direction = 1;
+						servo = servos["camera_tilt"];
+						// console.log("Moving " + servo.name + " by " + direction);
+						break;
+					case "reset":
+						$.get('servo_reset', function(response){
+							console.log(response.response);
+						});
+						return;
+						break;
+					default:
+						console.log("Failed to determine direction");
+				}
+				$.get('move_servo/' + servo.id + "/" + direction, function(response){
+					console.log(response.response);
+				});
+			});
+			$('body').keydown(function(event) {
+			  	var key = event.which;
+			  	console.log(key);
+				var direction;
+				var servo;
+				switch(key) {
+					case 37:
+						direction = 1;
+						servo = servos["camera_pan"];
+						$.get('move_servo/' + servo.id + "/" + direction, function(response){
+							console.log(response.response);
+						});
+					
+					break;
+				    case 39:
+						direction = -1;
+						servo = servos["camera_pan"];
+						$.get('move_servo/' + servo.id + "/" + direction, function(response){
+							console.log(response.response);
+						});
+					
+					break;
+					case 38:
+						direction = -1;
+						servo = servos["camera_tilt"];
+						$.get('move_servo/' + servo.id + "/" + direction, function(response){
+							console.log(response.response);
+						});
+					
+					break;
+					case 40:
+						direction = 1;
+						servo = servos["camera_tilt"];
+						$.get('move_servo/' + servo.id + "/" + direction, function(response){
+							console.log(response.response);
+						});
+					
+					break;
+					case 13:
+						$.get('servo_reset', function(response){
+							console.log(response.response);
+						});
+					break;
+					case 87:
+						$.get('/move_motor_in_direction/forward', function(response){
+							console.log(response.response);
+						});
+					
+					break;
+					case 83:
+						$.get('/move_motor_in_direction/backward', function(response){
+							console.log(response.response);
+						});
+					
+					break;
+					case 65:
+						$.get('/turn_motor/left', function(response){
+							console.log(response.response);
+						});
+					
+					break;
+					case 68:
+						$.get('/turn_motor/right', function(response){
+							console.log(response.response);
+						});
+					
+					break;
+					case 32:
+						$.get('/move_motor_in_direction/stop', function(response){
+							console.log(response.response);
+						});
+					
+					break;
+					default:
+						// console.log("Failed to determine direction");
+				}
+			});
+		})
+		</script>
+		<style>
+			.pan_left {
+				position: absolute;
+				left:0;
+				top: 45%;
+
+			}
+			.pan_right {
+				position: absolute;
+				right: 0;
+				top: 45%;
+			}
+			.tilt_up {
+				position: absolute;
+				top:0;
+				left:42%;
+			}
+			.tilt_down {
+				position: absolute;
+				bottom: 0;
+				left:40%;
+			}
+			#reset {
+				position: absolute;
+				bottom: 40%;
+				left: 43%;
+			}
+			#release {
+				position: absolute;
+				bottom: 40%;
+				left: 43%;
+			}
+			.camera_servo_controls_wrap {
+				/*margin-left: 30%;*/
+				display: inline-block;
+				position: relative;
+				width: 20%;
+				height: 20%;
+				/*margin-left: auto;*/
+    			/*margin-right: auto;*/
+			}
+			.motor_control_wrap {
+				display: inline-block;
+				position: relative;
+				width: 20%;
+				height: 20%;
+				/*margin-left: auto;*/
+    			/*margin-right: auto;*/
+    			margin-top: 20px;
+			}
+			h1.title {
+				text-align: center;
+			}
+
+			.trigger_button_wrap {
+				width: 100%;
+				text-align: center;
+			}
+			.trigger_button_wrap button {
+				width: 20%;
+				margin:2%;
+			}
+			#yellow {
+				background-color: yellow;
+				color: black;
+				font-size: 18px;
+				border-radius: 10px;
+			}
+			#blue {
+				background-color: blue;
+				color: white;
+				font-size: 18px;
+				border-radius: 10px;
+			}
+			#green {
+				background-color: green;
+				color: white;
+				font-size: 18px;
+				border-radius: 10px;
+			}
+			#red {
+				background-color: red;
+				color: white;
+				font-size: 18px;
+				border-radius: 10px;
+			}
+		</style>
+	</body>
+</html>
