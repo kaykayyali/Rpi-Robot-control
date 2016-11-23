@@ -33,7 +33,9 @@ var Manager = function() {
 	this.counter = 0;
   this.motor_controller = Motor_Hat;
   this.default_PWM_FREQ = 60;
-  this.default_MOTOR_SPEED = 180;
+  this.default_MOTOR_SPEED = 150;
+  this.MAX_MOTOR_SPEED = 225;
+  this.turning_MOTOR_SPEED = 80;
 }
 
 Manager.prototype.set_defaults = function() {
@@ -112,7 +114,7 @@ app.get('/move_motor_in_direction/:direction', function (req, res) {
   } 
   direction = direction.toUpperCase();
   var options = {
-    new_motor_speed: 100
+    new_motor_speed: Robot.turning_MOTOR_SPEED
   };
   Robot.set_new_speeds(options);
   Robot.motor_controller.motors.forEach(function(motor){
