@@ -19,7 +19,7 @@ var Manager = function() {
         name: "pan",
         min: 150,
         max: 700,
-        center: 400
+        center: 350
       });
   // Higher means lower 350 center is lower than 250
   this.tilt_servo =  new Servo({
