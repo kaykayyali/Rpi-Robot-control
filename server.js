@@ -27,15 +27,16 @@ var Manager = function() {
       name: "tilt",
       min: 150,
       max: 400,
-      center: 300
+      center: 250
       });
   this.servos = [this.pan_servo, this.tilt_servo];
 	this.counter = 0;
   this.motor_controller = Motor_Hat;
   this.default_PWM_FREQ = 60;
   this.default_MOTOR_SPEED = 150;
-  this.MAX_MOTOR_SPEED = 225;
+  this.MAX_MOTOR_SPEED = 255;
   this.turning_MOTOR_SPEED = 80;
+  this.servo_movement_multiplier = 10;
 }
 
 Manager.prototype.set_defaults = function() {
@@ -91,8 +92,7 @@ Manager.prototype.move_servo = function(servo_number, direction) {
   else if (direction < 0){
     direction = -1;
   }
-  var multiplier = 20;
-  var delta = direction * multiplier;
+  var delta = direction * self.servo_movement_multiplier;
   console.log("POSITION BEFORE MOVING ", servo.position);
   var old_position = servo.position;
   var new_position = old_position + delta; 
