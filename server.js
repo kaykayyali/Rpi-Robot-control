@@ -37,7 +37,7 @@ var Manager = function() {
 Manager.prototype.set_defaults = function() {
   Pwm_Controller.setPWMFreq(60);
   Robot.motor_controller.motors.forEach(function(motor){
-    motor.setSpeed(70);
+    motor.setSpeed(225);
   });
   this.reset_servos();
 }
