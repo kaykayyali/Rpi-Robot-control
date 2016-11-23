@@ -32,15 +32,34 @@ var Manager = function() {
   this.servos = [this.pan_servo, this.tilt_servo];
 	this.counter = 0;
   this.motor_controller = Motor_Hat;
+  this.default_PWM_FREQ = 60;
+  this.default_MOTOR_SPEED = 180;
 }
 
 Manager.prototype.set_defaults = function() {
-  Pwm_Controller.setPWMFreq(60);
+  var self = this;
+  Pwm_Controller.setPWMFreq(this.default_PWM_FREQ);
   Robot.motor_controller.motors.forEach(function(motor){
-    motor.setSpeed(225);
+    motor.setSpeed(self.default_MOTOR_SPEED);
   });
   this.reset_servos();
-}
+};
+
+Manager.prototype.set_new_speeds = function(options) {
+  var self = this;
+  var new_pwm_freq = options.pwm_freq;
+  var new_motor_speed = options.motor_speed;
+  // Change pwm freq, Allows for more precise movements or more abrupt movements
+  if (new_pwm_freq) {
+    Pwm_Controller.setPWMFreq(new_pwm_freq);
+  }
+  // Change motor speed, Allows for more precise movements or more abrupt movements (used for turning)
+  if (new_motor_speed) {
+    Robot.motor_controller.motors.forEach(function(motor){
+      motor.setSpeed(new_motor_speed);
+    });
+  }
+};
 
 Manager.prototype.reset_servos = function() {
   var self = this;
@@ -92,6 +111,10 @@ app.get('/move_motor_in_direction/:direction', function (req, res) {
     direction = "stop"
   } 
   direction = direction.toUpperCase();
+  var options = {
+    new_motor_speed: 100
+  };
+  Robot.set_new_speeds(options);
   Robot.motor_controller.motors.forEach(function(motor){
     motor.run(direction);
   });
@@ -110,6 +133,10 @@ app.get('/turn_motor/:direction', function (req, res) {
   else {
     motor_map = [0,1,1,0];
   }
+  var options = {
+    new_motor_speed: Robot.default_MOTOR_SPEED
+  };
+  Robot.set_new_speeds(options);
   Robot.motor_controller.motors.forEach(function(motor, index){
     var motors_direction
     if (motor_map[index] == 0) {
