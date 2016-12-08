@@ -80,6 +80,14 @@ Manager.prototype.reset_servos = function() {
   });
 };
 
+Manager.prototype.smell_on = function() {
+  var self = this;
+  self.move_servo(self.smell_serove.channel, self.smell_servo.max);
+};
+Manager.prototype.smell_off = function() {
+  var self = this;
+  self.move_servo(self.smell_serove.channel, self.smell_servo.min);
+};
 Manager.prototype.stop_motors = function() {
   Robot.motor_controller.motors.forEach(function(motor){
     motor.setSpeed(0);
@@ -167,6 +175,19 @@ app.get('/servo_reset', function (req, res) {
   Robot.reset_servos();
   res.json({
     response: "Reset all servos"
+  });
+});
+
+app.get('/smell_off', function (req, res) {
+  Robot.smell_off();
+  res.json({
+    response: "Smell off"
+  });
+});
+app.get('/smell_on', function (req, res) {
+  Robot.smell_on();
+  res.json({
+    response: "Smell on"
   });
 });
 
