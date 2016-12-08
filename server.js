@@ -14,23 +14,31 @@ var rpio = require('rpio'),
 var Manager = function() {
 	this.lasers = [laser_module_one];
   this.pan_servo = new Servo({
-        position: 0,
-        channel: 0,
-        name: "pan",
-        min: 150,
-        max: 700,
-        center: 350
-      });
+    position: 0,
+    channel: 0,
+    name: "pan",
+    min: 150,
+    max: 700,
+    center: 350
+  });
   // Higher means lower 350 center is lower than 250
   this.tilt_servo =  new Servo({
-      position: 0,
-      channel: 1,
-      name: "tilt",
-      min: 150,
-      max: 400,
-      center: 325
-      });
-  this.servos = [this.pan_servo, this.tilt_servo];
+    position: 0,
+    channel: 1,
+    name: "tilt",
+    min: 150,
+    max: 400,
+    center: 325
+  });
+  this.smell_servo =  new Servo({
+    position: 0,
+    channel: 2,
+    name: "smell",
+    min: 150,
+    max: 400,
+    center: 325
+  });
+  this.servos = [this.pan_servo, this.tilt_servo, this.smell_servo];
 	this.counter = 0;
   this.motor_controller = Motor_Hat;
   this.default_PWM_FREQ = 60;
