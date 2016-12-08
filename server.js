@@ -82,11 +82,11 @@ Manager.prototype.reset_servos = function() {
 
 Manager.prototype.smell_on = function() {
   var self = this;
-  self.move_servo(self.smell_serove.channel, self.smell_servo.max);
+  self.move_servo(self.smell_servo.channel, self.smell_servo.max);
 };
 Manager.prototype.smell_off = function() {
   var self = this;
-  self.move_servo(self.smell_serove.channel, self.smell_servo.min);
+  self.move_servo(self.smell_servo.channel, self.smell_servo.min);
 };
 Manager.prototype.stop_motors = function() {
   Robot.motor_controller.motors.forEach(function(motor){
