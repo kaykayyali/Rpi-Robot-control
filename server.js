@@ -36,13 +36,13 @@ var Manager = function() {
     name: "smell",
     min: 150,
     max: 400,
-    center: 325
+    center: 150
   });
   this.servos = [this.pan_servo, this.tilt_servo, this.smell_servo];
 	this.counter = 0;
   this.motor_controller = Motor_Hat;
   this.default_PWM_FREQ = 60;
-  this.default_MOTOR_SPEED = 150;
+  this.default_MOTOR_SPEED = 100;
   this.MAX_MOTOR_SPEED = 255;
   this.turning_MOTOR_SPEED = 80;
   this.servo_movement_multiplier = 10;
