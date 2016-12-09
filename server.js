@@ -28,7 +28,7 @@ var Manager = function() {
     name: "tilt",
     min: 150,
     max: 400,
-    center: 325
+    center: 375
   });
   this.smell_servo =  new Servo({
     position: 0,
@@ -42,10 +42,10 @@ var Manager = function() {
 	this.counter = 0;
   this.motor_controller = Motor_Hat;
   this.default_PWM_FREQ = 60;
-  this.default_MOTOR_SPEED = 100;
+  this.default_MOTOR_SPEED = 150;
   this.MAX_MOTOR_SPEED = 255;
-  this.turning_MOTOR_SPEED = 80;
-  this.servo_movement_multiplier = 10;
+  this.turning_MOTOR_SPEED = 100;
+  this.servo_movement_multiplier = 5;
 }
 
 Manager.prototype.set_defaults = function() {
