@@ -28,7 +28,7 @@ var Manager = function() {
     name: "tilt",
     min: 150,
     max: 400,
-    center: 375
+    center: 275
   });
   this.smell_servo =  new Servo({
     position: 0,
