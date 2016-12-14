@@ -39,12 +39,12 @@ var Manager = function() {
     center: 150
   });
   this.claw_servo =  new Servo({
-    position: 0,
+    position: 140,
     channel: 3,
     name: "claw",
-    min: 0,
-    max: 600,
-    center: 150
+    min: 140,
+    max: 400,
+    center: 140
   });
   this.servos = [this.pan_servo, this.tilt_servo, this.smell_servo, this.claw_servo];
 	this.counter = 0;
