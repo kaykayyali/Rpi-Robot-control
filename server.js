@@ -38,7 +38,15 @@ var Manager = function() {
     max: 400,
     center: 150
   });
-  this.servos = [this.pan_servo, this.tilt_servo, this.smell_servo];
+  this.claw_servo =  new Servo({
+    position: 0,
+    channel: 3,
+    name: "claw",
+    min: 150,
+    max: 400,
+    center: 150
+  });
+  this.servos = [this.pan_servo, this.tilt_servo, this.smell_servo, this.claw_servo];
 	this.counter = 0;
   this.motor_controller = Motor_Hat;
   this.default_PWM_FREQ = 60;
