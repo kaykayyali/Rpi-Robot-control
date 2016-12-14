@@ -42,8 +42,8 @@ var Manager = function() {
     position: 0,
     channel: 3,
     name: "claw",
-    min: 50,
-    max: 500,
+    min: 0,
+    max: 600,
     center: 150
   });
   this.servos = [this.pan_servo, this.tilt_servo, this.smell_servo, this.claw_servo];
